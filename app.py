@@ -8,7 +8,7 @@ from telegram.ext import (
     MessageHandler, filters, ContextTypes, ConversationHandler
 )
 
-# --- ВЕБ-СЕРВЕР ДЛЯ RENDER (чтобы он не ругался) ---
+# --- ВЕБ-СЕРВЕР ДЛЯ RENDER ---
 web_app = Flask(__name__)
 @web_app.route('/')
 def home(): return "Бот работает!"
@@ -91,14 +91,13 @@ async def timeout_cancel(context: ContextTypes.DEFAULT_TYPE):
 
 if __name__ == '__main__':
     Thread(target=run_web).start()
-    # Токен берется из настроек Render!
-token = os.environ.get("TELEGRAM_TOKEN")
-if not token:
-    print("ОШИБКА: Токен не найден! Проверьте Environment Variables в Render!")
-else:
-    print(f"Токен найден! Начинаю запуск...")
-
-app = Application.builder().token(token).build()
+    token = os.environ.get("TELEGRAM_TOKEN")
+    if not token:
+        print("ОШИБКА: Токен не найден! Проверьте Environment Variables в Render!")
+    else:
+        print(f"Токен найден! Начинаю запуск...")
+    
+    app = Application.builder().token(token).build()
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler("stars", stars)],
         states={
